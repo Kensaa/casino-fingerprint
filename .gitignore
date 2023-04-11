@@ -3,3 +3,4 @@ dist/
 node_modules/
 img/temp
 yarn-error.log*
+build/

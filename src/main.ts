@@ -1,10 +1,11 @@
 import * as jimp from 'jimp'
 import * as nut from '@nut-tree/nut-js'
 import { Key, Region } from '@nut-tree/nut-js'
+import * as path from 'path'
 
 nut.keyboard.config.autoDelayMs = 20
 
-const UPDATE_RATE = 10000
+const UPDATE_RATE = 10
 const FINGERPRINT_COUNT = 4
 const HEADER_POS = [370, 90, 1550, 120]
 const FINGERPRINT_POS = [974, 157, 1320, 685]
@@ -69,7 +70,12 @@ async function loadFingerprints(count: number): Promise<jimp[]> {
     return await Promise.all(
         new Array(count)
             .fill(0)
-            .map((_, i) => jimp.read(`./img/${i + 1}/full.png`))
+            .map((_, i) =>
+                jimp.read(
+                    path.join(__dirname, '..', 'img', i + 1 + '', 'full.png')
+                )
+            )
+        //.map((_, i) => jimp.read(`./img/${i + 1}/full.png`))
     )
 }
 
@@ -85,7 +91,18 @@ async function loadFingerprintParts(count: number): Promise<jimp[][]> {
             await Promise.all(
                 new Array(4) // beacause there is 4 parts to check per fingerprint
                     .fill(0)
-                    .map((_, i) => jimp.read(`./img/${index + 1}/${i + 1}.png`))
+                    .map((_, i) =>
+                        jimp.read(
+                            path.join(
+                                __dirname,
+                                '..',
+                                'img',
+                                `${index + 1}`,
+                                `${i + 1}.png`
+                            )
+                        )
+                    )
+                //.map((_, i) => jimp.read(`./img/${index + 1}/${i + 1}.png`))
             )
         )
     }
@@ -133,13 +150,16 @@ async function press(key: Key) {
     const width = await nut.screen.width()
     const height = await nut.screen.height()
 
-    const headerIMG = await jimp.read('./img/header.png')
+    const headerIMG = await jimp.read(
+        path.join(__dirname, '..', 'img', 'header.png')
+    )
 
     const fingerprints = await loadFingerprints(FINGERPRINT_COUNT)
     const fingerprintsParts = await loadFingerprintParts(FINGERPRINT_COUNT)
 
     if (width == 1920 && height == 1080) {
-        console.log('1080p')
+        console.log('1080p detected')
+        console.log('waiting for fingerprint ...')
         //1080P
         while (true) {
             const headerScreenshot = await screen(HEADER_POS)
