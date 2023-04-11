@@ -72,10 +72,9 @@ async function loadFingerprints(count: number): Promise<jimp[]> {
             .fill(0)
             .map((_, i) =>
                 jimp.read(
-                    path.join(__dirname, '..', 'img', i + 1 + '', 'full.png')
+                    path.join(__dirname, '..', 'img', `${i + 1}`, 'full.png')
                 )
             )
-        //.map((_, i) => jimp.read(`./img/${i + 1}/full.png`))
     )
 }
 
@@ -102,7 +101,6 @@ async function loadFingerprintParts(count: number): Promise<jimp[][]> {
                             )
                         )
                     )
-                //.map((_, i) => jimp.read(`./img/${index + 1}/${i + 1}.png`))
             )
         )
     }
@@ -160,7 +158,7 @@ async function press(key: Key) {
     if (width == 1920 && height == 1080) {
         console.log('1080p detected')
         console.log('waiting for fingerprint ...')
-        //1080P
+
         while (true) {
             const headerScreenshot = await screen(HEADER_POS)
             // check for hacking
@@ -220,6 +218,7 @@ async function press(key: Key) {
         }
     } else {
         console.error('screen size not supported')
+        await wait(5000)
         process.exit(0)
     }
 })()
