@@ -26,7 +26,8 @@
             "latest-macos-x64"
         ],
         "assets": [
-            "img/**/*"
+            "img/**/*",
+            "node_modules/@nut-tree/**/*"
         ],
         "outputPath": "build"
     }
